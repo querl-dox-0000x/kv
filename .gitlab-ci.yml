@@ -67,15 +67,15 @@ mix_run:
     variables:
     - $CI_COMMIT_MESSAGE =~ /mix run/  
     
-code_formatter:
+mix_format:
   artifacts:
-    name: "code_formatter"
+    name: "mix_formatter"
     expire_in: "1 day"
     paths:
       #- $PUB_DIR
       #- $DEV_DIR
   variables:
-    CI_COMMIT_TAG: "code_formatter"
+    CI_COMMIT_TAG: "mix_formatter"
   stage: build
   script: 
     - mix format --check-formatted
@@ -85,7 +85,7 @@ code_formatter:
     - git push --force "https://${GITLAB_USER_NAME}:${CI_GIT_TOKEN}@${CI_REPOSITORY_URL#*@}" "HEAD:$CI_COMMIT_TAG"
   only:
     variables:
-    - $CI_COMMIT_MESSAGE =~ /code format/   
+    - $CI_COMMIT_MESSAGE =~ /mix format/   
     
 code_review:
   artifacts:
