@@ -1,4 +1,4 @@
-defmodule KV   do
+defmodule KV do
   @moduledoc """
   Documentation for KV.
   """
@@ -12,7 +12,7 @@ defmodule KV   do
       :world
 
   """
-  def hello   do
+  def hello do
     :world
   end
 end
