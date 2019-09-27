@@ -70,17 +70,15 @@ new_project:
       #- $PUB_DIR
       #- $DEV_DIR
   variables:
-    CI_COMMIT_TAG: "New Elixir Mix Project"
+    CI_COMMIT_TAG: "mix-project"
   stage: build
   script: 
     - mix new $MIX_DIR $ELIXIR_PROJECT --module $ELIXIR_MODULE
-    #- cd $MIX_DIR
-    - ls -a -R ./
-    - ls -a -R ./tmp
-    #- ls -a -R "$MIX_DIR"
-    #- git add .
-    #- git commit -m "Typescript Project Code Review"
-    #- git push --force "https://${GITLAB_USER_NAME}:${CI_GIT_TOKEN}@${CI_REPOSITORY_URL#*@}" "HEAD:$CI_COMMIT_TAG"
+    - cd $MIX_DIR
+    - ls -a -R "$MIX_DIR"
+    - git add .
+    - git commit -m "New Elixir Project"
+    - git push --force "https://${GITLAB_USER_NAME}:${CI_GIT_TOKEN}@${CI_REPOSITORY_URL#*@}" "HEAD:$CI_COMMIT_TAG"
   only:
     variables:
     - $CI_COMMIT_MESSAGE =~ /mix project/   
