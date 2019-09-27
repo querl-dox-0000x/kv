@@ -56,6 +56,17 @@ mix_compile:
     variables:
     - $CI_COMMIT_MESSAGE =~ /mix compile/  
     
+mix_run:
+  stage: test
+  environment:
+    name: development
+  script:
+    - mix run
+    - ls -a -R ./_build
+  only:
+    variables:
+    - $CI_COMMIT_MESSAGE =~ /mix run/  
+    
 code_review:
   artifacts:
     name: "code_review"
