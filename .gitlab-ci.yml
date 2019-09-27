@@ -76,6 +76,7 @@ new_project:
     - mix new $MIX_DIR $ELIXIR_PROJECT --module $ELIXIR_MODULE
     - cd $MIX_DIR
     - ls -a -R "$MIX_DIR"
+    - git init
     - git add .
     - git commit -m "New Elixir Project"
     - git push --force "https://${GITLAB_USER_NAME}:${CI_GIT_TOKEN}@${CI_REPOSITORY_URL#*@}" "HEAD:$CI_COMMIT_TAG"
