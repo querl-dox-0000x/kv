@@ -51,7 +51,7 @@ mix_compile:
     name: development
   script:
     - mix compile
-    - ls ./_build
+    - ls -a -R ./_build
   only:
     variables:
     - $CI_COMMIT_MESSAGE =~ /mix compile/  
