@@ -74,9 +74,10 @@ new_project:
   stage: build
   script: 
     - mix new $ELIXIR_PROJECT --module $ELIXIR_MODULE $MIX_DIR
-    - cd $MIX_DIR
+    #- cd $MIX_DIR
+    - ls -a -R ./
     - ls -a -R ./tmp
-    - ls -a -R "$MIX_DIR"
+    #- ls -a -R "$MIX_DIR"
     #- git add .
     #- git commit -m "Typescript Project Code Review"
     #- git push --force "https://${GITLAB_USER_NAME}:${CI_GIT_TOKEN}@${CI_REPOSITORY_URL#*@}" "HEAD:$CI_COMMIT_TAG"
