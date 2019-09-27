@@ -1,0 +1,103 @@
+image: "registry.gitlab.com/querl.dox/elixir/build:dev-image"
+
+cache:
+  paths:
+    #- ./node_modules
+    #- ./vendor
+
+stages:
+  - development
+  - test
+  - build
+  - deploy
+
+variables:
+  CI_GIT_TOKEN: "_zZas_5s8Rxs35Qe_RyS"
+  ELIXIR_PROJECT: "kv"
+  ELIXIR_MODULE: "KV"
+  MIX_DIR: "/tmp/$ELIXIR_PROJECT"
+  
+before_script:
+  - git config --global credential.helper cache
+  - git config --global user.email querl.dox.protonmail.com
+  - git config --global user.name querl.dox
+
+version_check:
+  stage: test
+  environment:
+    name: development
+  when: manual
+  script:
+    - elixir --version
+    - mix --version
+    - erlang --version
+  only:
+    variables:
+    - $CI_COMMIT_MESSAGE =~ /vc/  
+    
+mix_compile1:
+  when: manual
+  stage: test
+  environment:
+    name: development
+  script:
+    - tsc --showConfig true --project dev-tsconfig.json
+    - tsc --project dev-tsconfig.json
+    - ls -a -R "$DEV_DIR"
+  only:
+    changes:
+    - src/scripts/*.{ts}
+
+mix_compile2:
+  stage: test
+  environment:
+    name: development
+  script:
+    - tsc --showConfig true --project dev-tsconfig.json
+    - tsc --project dev-tsconfig.json
+    - ls -a -R "$DEV_DIR"
+  only:
+    changes:
+    - src/scripts/*.{ts}
+    variables:
+    - $CI_COMMIT_MESSAGE =~ /tsc/   
+    
+new_project:
+  artifacts:
+    name: "elixir_project"
+    expire_in: "1 day"
+    paths:
+      #- $PUB_DIR
+      #- $DEV_DIR
+  variables:
+    CI_COMMIT_TAG: "mix project"
+  stage: build
+  script: 
+    - mix new $ELIXIR_PROJECT --module $ELIXIR_MODULE $MIX_DIR
+    - cd $MIX_DIR
+    - ls -a -R "$MIX_DIR"
+    #- git add .
+    #- git commit -m "Typescript Project Code Review"
+    #- git push --force "https://${GITLAB_USER_NAME}:${CI_GIT_TOKEN}@${CI_REPOSITORY_URL#*@}" "HEAD:$CI_COMMIT_TAG"
+  only:
+    variables:
+    - $CI_COMMIT_MESSAGE =~ /code review/   
+
+pages:
+  when: manual
+  artifacts:
+    name: "pages"
+    expire_in: "1 day"
+    paths:
+      - public
+  cache:
+    paths:
+      - ./vendor
+  stage: deploy
+  script: 
+    - cp ./src/index.html $PUB_DIR/index.html
+    - tsc --project pages-tsconfig.json --showConfig true
+    - tsc --project pages-tsconfig.json
+  only:
+    variables:
+    - $CI_COMMIT_MESSAGE =~ /pages/ 
