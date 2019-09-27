@@ -73,7 +73,7 @@ new_project:
     CI_COMMIT_TAG: "New Elixir Mix Project"
   stage: build
   script: 
-    - mix new $ELIXIR_PROJECT --module $ELIXIR_MODULE $MIX_DIR
+    - mix new $MIX_DIR $ELIXIR_PROJECT --module $ELIXIR_MODULE
     #- cd $MIX_DIR
     - ls -a -R ./
     - ls -a -R ./tmp
