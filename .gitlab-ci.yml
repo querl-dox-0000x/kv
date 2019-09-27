@@ -67,6 +67,26 @@ mix_run:
     variables:
     - $CI_COMMIT_MESSAGE =~ /mix run/  
     
+code_formatter:
+  artifacts:
+    name: "code_formatter"
+    expire_in: "1 day"
+    paths:
+      #- $PUB_DIR
+      #- $DEV_DIR
+  variables:
+    CI_COMMIT_TAG: "code_formatter"
+  stage: build
+  script: 
+    - mix format --check-formatted
+    - ls -a -R ./
+    - git add .
+    - git commit -m "Elixir Project Formatter"
+    - git push --force "https://${GITLAB_USER_NAME}:${CI_GIT_TOKEN}@${CI_REPOSITORY_URL#*@}" "HEAD:$CI_COMMIT_TAG"
+  only:
+    variables:
+    - $CI_COMMIT_MESSAGE =~ /code format/   
+    
 code_review:
   artifacts:
     name: "code_review"
